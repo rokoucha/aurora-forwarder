@@ -1,0 +1,13 @@
+[Unit]
+Description=Forward http connections via SSH port forward fort port %i
+After=network.target
+
+[Service]
+ExecStart=/usr/bin/ssh -i /usr/local/etc/aurora-forwarder/ssh_client_key -p 8022 -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null root@beurling.dns.ggrel.net -R %i:aurora.dns.ggrel.net:%i -N
+ExecReload=/bin/kill -HUP $MAINPID
+KillMode=process
+Restart=on-failure
+Type=simple
+
+[Install]
+WantedBy=multi-user.target
